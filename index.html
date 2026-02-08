@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧮 Year 3/4 Maths Quiz 🎯</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--pri:#2563eb;--pri-light:#dbeafe;--green:#16a34a;--green-light:#dcfce7;--red:#dc2626;--red-light:#fee2e2;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:80px}
+header{background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;padding:20px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+header h1{font-size:1.5rem;margin-bottom:4px}
+.progress-bar{height:6px;background:rgba(255,255,255,.3);border-radius:3px;margin-top:8px;max-width:600px;margin-left:auto;margin-right:auto}
+.progress-fill{height:100%;background:#fff;border-radius:3px;transition:width .3s}
+.progress-text{font-size:.85rem;opacity:.9;margin-top:4px}
+nav{display:flex;gap:6px;padding:12px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:76px;z-index:99}
+nav button{flex-shrink:0;padding:8px 14px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s;white-space:nowrap}
+nav button.active{border-color:var(--pri);background:var(--pri-light);color:var(--pri)}
+nav button .badge{display:inline-block;background:var(--muted);color:#fff;border-radius:10px;padding:1px 6px;font-size:.7rem;margin-left:4px}
+nav button.active .badge{background:var(--pri)}
+nav button.complete .badge{background:var(--green)}
+.section{display:none;padding:16px;max-width:800px;margin:0 auto}
+.section.active{display:block}
+.section h2{font-size:1.2rem;margin-bottom:16px;color:var(--pri);display:flex;align-items:center;gap:8px}
+.question{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);border:2px solid transparent;transition:border-color .2s}
+.question.correct{border-color:var(--green);background:var(--green-light)}
+.question.incorrect{border-color:var(--red);background:var(--red-light)}
+.q-header{font-weight:600;margin-bottom:12px;font-size:.95rem}
+.q-num{color:var(--pri);margin-right:4px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.options{grid-template-columns:1fr}}
+.opt{padding:10px 14px;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;font-size:.9rem;text-align:left;background:#fff;display:flex;align-items:center;gap:8px}
+.opt:hover{border-color:var(--pri);background:var(--pri-light)}
+.opt.selected{border-color:var(--pri);background:var(--pri);color:#fff}
+.opt.correct-answer{border-color:var(--green);background:var(--green-light);color:var(--text)}
+.opt.wrong-answer{border-color:var(--red);background:var(--red-light);color:var(--text)}
+.opt .letter{font-weight:700;min-width:20px}
+.explanation{display:none;margin-top:10px;padding:10px;background:#f0f9ff;border-radius:8px;font-size:.85rem;color:#0369a1;border-left:3px solid #0ea5e9}
+.explanation.show{display:block}
+.explain-btn{font-size:.8rem;color:var(--pri);background:none;border:none;cursor:pointer;margin-top:8px;text-decoration:underline}
+.data-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem}
+.data-table th,.data-table td{border:1px solid var(--border);padding:6px 10px;text-align:center}
+.data-table th{background:var(--pri-light);color:var(--pri);font-weight:600}
+.grid-3x3{display:inline-grid;grid-template-columns:repeat(3,48px);gap:2px;margin:10px 0}
+.grid-3x3 span{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:2px solid var(--border);border-radius:4px;font-weight:700;font-size:1.1rem;background:#fff}
+.grid-3x3 span.unknown{background:#fef3c7;color:#d97706;font-style:italic}
+svg{max-width:100%;height:auto;margin:8px 0;display:block}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 16px;display:flex;justify-content:center;gap:12px;z-index:100}
+.btn{padding:12px 28px;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}
+.btn-primary:hover{background:#1d4ed8}
+.btn-secondary{background:var(--border);color:var(--text)}
+.btn-secondary:hover{background:#cbd5e1}
+.score-box{text-align:center;padding:24px;background:linear-gradient(135deg,#2563eb,#0ea5e9);color:#fff;border-radius:16px;margin:20px 0;font-size:1.2rem}
+.score-box .big{font-size:2.5rem;font-weight:800;margin:8px 0}
+.result-icon{font-size:1.2rem;margin-right:4px}
+@media print{header,nav,.bottom-bar,.explain-btn,.opt{cursor:default}.section{display:block!important;page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+<h1>🧮 Year 3/4 Maths Challenge 🎯</h1>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="progress-text" id="progressText">0 / 80 answered</div>
+</header>
+<nav id="nav"></nav>
+<div id="content"></div>
+<div class="bottom-bar">
+<button class="btn btn-primary" id="submitBtn" onclick="submitQuiz()">✅ Submit Quiz</button>
+<button class="btn btn-secondary" id="resetBtn" onclick="resetQuiz()">🔄 Reset</button>
+</div>
+
+<script>
+const sections=[
+{id:"geo",title:"📐 Geometry",questions:[
+{q:"A rectangle has an area of 48 cm². A triangle is drawn inside using the full base and height. What is the triangle's area?",svg:`<svg viewBox="0 0 200 120" width="240"><rect x="10" y="10" width="180" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="10,110 190,110 100,10" fill="#2563eb" opacity="0.4" stroke="#1d4ed8" stroke-width="2"/><text x="100" y="70" text-anchor="middle" font-size="12" fill="#1e293b">Triangle</text></svg>`,opts:["12 cm²","24 cm²","36 cm²","48 cm²","32 cm²"],ans:1,exp:"Triangle area = ½ × base × height = ½ × 48 = 24 cm²"},
+{q:"A square has sides of 10 cm. A smaller square of 4 cm is cut from one corner. What is the remaining area?",svg:`<svg viewBox="0 0 200 200" width="200"><rect x="10" y="10" width="180" height="180" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="10" y="10" width="72" height="72" fill="#fff" stroke="#dc2626" stroke-width="2" stroke-dasharray="4"/><text x="100" y="120" text-anchor="middle" font-size="12">Remaining area?</text></svg>`,opts:["100 cm²","84 cm²","96 cm²","80 cm²","90 cm²"],ans:1,exp:"10² - 4² = 100 - 16 = 84 cm²"},
+{q:"Two rectangles (8×5) overlap. The overlap is a 3×3 square. What is the total area covered?",svg:`<svg viewBox="0 0 260 130" width="280"><rect x="10" y="10" width="140" height="90" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="100" y="30" width="140" height="90" fill="#bbf7d0" stroke="#16a34a" stroke-width="2" opacity="0.7"/><rect x="100" y="30" width="50" height="50" fill="#fbbf24" stroke="#d97706" stroke-width="2" opacity="0.5"/><text x="125" y="60" text-anchor="middle" font-size="10">3×3</text></svg>`,opts:["71 cm²","80 cm²","77 cm²","89 cm²","62 cm²"],ans:0,exp:"2×(8×5) - 3×3 = 80 - 9 = 71 cm²"},
+{q:"A right triangle has base 12 and height 8. A 4×3 rectangle is inside. What is the shaded (triangle minus rectangle) area?",svg:`<svg viewBox="0 0 200 140" width="240"><polygon points="10,130 190,130 10,10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="30" y="80" width="60" height="45" fill="#fff" stroke="#dc2626" stroke-width="2"/><text x="60" y="106" text-anchor="middle" font-size="10">4×3</text></svg>`,opts:["36 cm²","48 cm²","42 cm²","30 cm²","24 cm²"],ans:0,exp:"½×12×8 - 4×3 = 48 - 12 = 36 cm²"},
+{q:"A circle (area 64 cm²) is cut into 8 equal slices. 3 slices are shaded. What is the shaded area?",svg:`<svg viewBox="0 0 160 160" width="160"><circle cx="80" cy="80" r="70" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><path d="M80,80 L80,10 A70,70 0 0,1 149.5,45Z" fill="#2563eb" opacity="0.5"/><path d="M80,80 L149.5,45 A70,70 0 0,1 150,80Z" fill="#2563eb" opacity="0.5"/><path d="M80,80 L150,80 A70,70 0 0,1 129.5,129.5Z" fill="#2563eb" opacity="0.5"/></svg>`,opts:["16 cm²","32 cm²","24 cm²","8 cm²","40 cm²"],ans:2,exp:"Each slice = 64÷8 = 8 cm². 3 slices = 3×8 = 24 cm²"},
+{q:"A rectangle is 14×6 cm. It is cut along a diagonal. What is the area of one triangle?",svg:`<svg viewBox="0 0 220 100" width="240"><rect x="10" y="10" width="200" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="10" y1="90" x2="210" y2="10" stroke="#dc2626" stroke-width="2" stroke-dasharray="5"/><polygon points="10,10 210,10 10,90" fill="#2563eb" opacity="0.3"/></svg>`,opts:["84 cm²","42 cm²","28 cm²","56 cm²","70 cm²"],ans:1,exp:"½ × 14 × 6 = 42 cm²"},
+{q:"Two squares are joined side by side. One has side 5 cm, the other 3 cm. What is the total area?",svg:`<svg viewBox="0 0 200 120" width="220"><rect x="10" y="10" width="100" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="110" y="40" width="60" height="60" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><text x="60" y="65" text-anchor="middle" font-size="11">5×5</text><text x="140" y="75" text-anchor="middle" font-size="11">3×3</text></svg>`,opts:["25 cm²","30 cm²","34 cm²","64 cm²","16 cm²"],ans:2,exp:"5² + 3² = 25 + 9 = 34 cm²"},
+{q:"A square has area 100 cm². Four corner triangles (legs 2 cm each) are cut off. What remains?",svg:`<svg viewBox="0 0 180 180" width="180"><rect x="10" y="10" width="160" height="160" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="10,10 42,10 10,42" fill="#fff" stroke="#dc2626" stroke-width="1"/><polygon points="170,10 170,42 138,10" fill="#fff" stroke="#dc2626" stroke-width="1"/><polygon points="10,170 10,138 42,170" fill="#fff" stroke="#dc2626" stroke-width="1"/><polygon points="170,170 138,170 170,138" fill="#fff" stroke="#dc2626" stroke-width="1"/></svg>`,opts:["96 cm²","92 cm²","88 cm²","84 cm²","98 cm²"],ans:1,exp:"Each triangle = ½×2×2 = 2 cm². Four = 8. 100 - 8 = 92 cm²"},
+{q:"Rectangle 10×6 cm. Two triangles each have base 10 and height 3. What is the total shaded area of both triangles?",svg:`<svg viewBox="0 0 200 120" width="240"><rect x="10" y="10" width="180" height="100" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="10,10 190,10 100,55" fill="#2563eb" opacity="0.4"/><polygon points="10,110 190,110 100,65" fill="#2563eb" opacity="0.4"/></svg>`,opts:["60 cm²","30 cm²","20 cm²","15 cm²","45 cm²"],ans:1,exp:"Each triangle = ½×10×3 = 15 cm². Two = 30 cm²"},
+{q:"Right triangle: base 10, height 6. A smaller triangle is formed by joining the midpoints. What is the smaller triangle's area?",svg:`<svg viewBox="0 0 200 140" width="220"><polygon points="10,130 190,130 10,10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="10,70 100,130 100,70" fill="#2563eb" opacity="0.4" stroke="#1d4ed8" stroke-width="1.5"/></svg>`,opts:["7.5 cm²","15 cm²","10 cm²","12 cm²","5 cm²"],ans:0,exp:"Big triangle = ½×10×6 = 30. Midpoint triangle = ¼ of big = 7.5 cm²"}
+]},
+{id:"logic",title:"🧠 Logic & Reasoning",questions:[
+{q:"All Zings are Zongs. Not all Zongs are Zings. Which must be true?",opts:["All Zongs are Zings","Some Zongs are Zings","No Zongs are Zings","All Zings are not Zongs","None of these"],ans:1,exp:"Since all Zings are Zongs, at least some Zongs must be Zings (namely, the ones that are Zings)."},
+{q:"All Wumps are Plumps. All Plumps are Grumps. Therefore all Wumps are:",opts:["Plumps only","Not Grumps","Grumps","Wumps","None of these"],ans:2,exp:"Wumps→Plumps→Grumps. So all Wumps are Grumps."},
+{q:"No Blips are Blops. Some Blops are Blaps. Therefore:",opts:["All Blaps are Blips","No Blaps are Blips","All Blops are Blaps","Some Blaps are not Blips","None of these"],ans:3,exp:"Some Blops are Blaps, and no Blips are Blops, so those Blaps (that are Blops) can't be Blips."},
+{q:"All squares are rectangles. All rectangles have 4 sides. Therefore all squares:",opts:["Have 4 sides","Are circles","Have 3 sides","Have 5 sides","None of these"],ans:0,exp:"Squares→Rectangles→4 sides."},
+{q:"Some Flinks are Flanks. All Flanks are Flunks. Therefore:",opts:["All Flinks are Flunks","Some Flinks are Flunks","No Flinks are Flunks","All Flunks are Flinks","None of these"],ans:1,exp:"The Flinks that are Flanks must also be Flunks."},
+{q:"All dogs are animals. Spot is a dog. Therefore:",opts:["Spot is an animal","Spot is a cat","All animals are dogs","Spot is not a dog","None of these"],ans:0,exp:"Dogs→Animals. Spot is a dog, so Spot is an animal."},
+{q:"No fish can fly. All sparrows can fly. Therefore:",opts:["Some fish are sparrows","All sparrows are fish","No sparrow is a fish","Some sparrows are fish","All fish are sparrows"],ans:2,exp:"Sparrows fly, fish don't. No sparrow can be a fish."},
+{q:"All Moops are Meeps. No Meeps are Mips. Therefore:",opts:["All Moops are Mips","No Moops are Mips","Some Moops are Mips","All Mips are Moops","None of these"],ans:1,exp:"Moops→Meeps, and no Meeps are Mips, so no Moops are Mips."},
+{q:"Some tall things are heavy. All heavy things are strong. Therefore:",opts:["Some tall things are strong","All tall things are strong","No tall things are strong","All strong things are tall","None of these"],ans:0,exp:"The tall things that are heavy must also be strong."},
+{q:"All circles are round. This shape is round. Therefore:",opts:["It is a circle","It is not a circle","It might be a circle","All round things are circles","None of these are necessarily true"],ans:4,exp:"Being round doesn't mean it's a circle — ovals are round too. We can't conclude anything for certain."}
+]},
+{id:"speed",title:"⏱️ Speed, Distance & Time",questions:[
+{q:"A car drives at 40 km/h for 15 minutes. How far does it travel?",opts:["5 km","10 km","15 km","20 km","40 km"],ans:1,exp:"15 min = ¼ hour. 40 × ¼ = 10 km"},
+{q:"Sam walks at 5 km/h for 2 hours. How far does he walk?",opts:["5 km","10 km","7 km","15 km","2.5 km"],ans:1,exp:"5 × 2 = 10 km"},
+{q:"A runner completes 100 m in 10 seconds. What is their speed in m/s?",opts:["10 m/s","5 m/s","100 m/s","20 m/s","1 m/s"],ans:0,exp:"100 ÷ 10 = 10 m/s"},
+{q:"In a 10 km race, the first half takes 22 min. The second half takes 50% longer. What is the total time?",opts:["44 min","55 min","33 min","66 min","50 min"],ans:1,exp:"Second half = 22 × 1.5 = 33 min. Total = 22 + 33 = 55 min"},
+{q:"A cyclist covers 12 km in 30 minutes. What is their speed in km/h?",opts:["6 km/h","12 km/h","24 km/h","30 km/h","36 km/h"],ans:2,exp:"30 min = 0.5 h. 12 ÷ 0.5 = 24 km/h"},
+{q:"A runner goes at 3 m/s for 10 minutes. How far in km?",opts:["1.5 km","1.8 km","3 km","0.3 km","18 km"],ans:1,exp:"10 min = 600 s. 3 × 600 = 1800 m = 1.8 km"},
+{q:"A train travels at 120 km/h for 45 minutes. How far?",opts:["90 km","120 km","60 km","45 km","180 km"],ans:0,exp:"45 min = ¾ hour. 120 × 0.75 = 90 km"},
+{q:"A swimmer completes a 50 m pool in 25 seconds. Speed?",opts:["1 m/s","2 m/s","5 m/s","25 m/s","0.5 m/s"],ans:1,exp:"50 ÷ 25 = 2 m/s"},
+{q:"A bus travels 30 km in 20 minutes. Speed in km/h?",opts:["90 km/h","60 km/h","30 km/h","20 km/h","120 km/h"],ans:0,exp:"20 min = ⅓ hour. 30 ÷ (1/3) = 90 km/h"},
+{q:"Emma jogs at 6 km/h. How long to jog 3 km?",opts:["15 min","20 min","30 min","45 min","60 min"],ans:2,exp:"3 ÷ 6 = 0.5 hours = 30 min"}
+]},
+{id:"data",title:"📊 Data Interpretation",questions:[
+{q:`<b>Swimming Times (seconds):</b><table class="data-table"><tr><th>Swimmer</th><th>50m</th><th>100m</th><th>200m</th></tr><tr><td>Amy</td><td>32</td><td>68</td><td>145</td></tr><tr><td>Ben</td><td>35</td><td>74</td><td>155</td></tr><tr><td>Cal</td><td>30</td><td>65</td><td>140</td></tr><tr><td>Di</td><td>33</td><td>70</td><td>148</td></tr></table>Who is the fastest 50m swimmer?`,opts:["Amy","Ben","Cal","Di","They are equal"],ans:2,exp:"Cal has the lowest time: 30s."},
+{q:"Using the swimming table above: How many seconds slower is Ben than Amy at 100m?",opts:["4s","6s","8s","2s","10s"],ans:1,exp:"Ben: 74s, Amy: 68s. 74 - 68 = 6s"},
+{q:"What is the total 200m time for all four swimmers?",opts:["540s","560s","575s","588s","600s"],ans:3,exp:"145 + 155 + 140 + 148 = 588s"},
+{q:"Who improved the most (best ratio) from 50m to 100m? (i.e. whose 100m time is closest to double their 50m time)",opts:["Amy","Ben","Cal","Di","All the same"],ans:0,exp:"Amy: 68/(2×32)=1.0625 ratio. She's closest to exactly doubling — best pacing improvement."},
+{q:"What is the average 50m time across all swimmers?",opts:["30s","32.5s","33s","35s","31s"],ans:1,exp:"(32+35+30+33)÷4 = 130÷4 = 32.5s"},
+{q:`<b>Weekly Fruit Sales:</b><table class="data-table"><tr><th>Day</th><th>Apples</th><th>Oranges</th><th>Bananas</th></tr><tr><td>Mon</td><td>45</td><td>30</td><td>25</td></tr><tr><td>Tue</td><td>50</td><td>35</td><td>20</td></tr><tr><td>Wed</td><td>40</td><td>45</td><td>30</td></tr><tr><td>Thu</td><td>55</td><td>25</td><td>35</td></tr><tr><td>Fri</td><td>60</td><td>40</td><td>28</td></tr></table>Which day had the most total fruit sold?`,opts:["Monday","Tuesday","Wednesday","Thursday","Friday"],ans:4,exp:"Fri: 60+40+28=128. That's the highest total."},
+{q:"What is the total number of oranges sold in the week?",opts:["150","160","175","180","200"],ans:2,exp:"30+35+45+25+40 = 175"},
+{q:"What is the difference between the highest and lowest banana sales in the week?",opts:["10","15","20","25","30"],ans:1,exp:"Highest: 35 (Thu), Lowest: 20 (Tue). 35-20=15"},
+{q:"What is the average daily apple sales?",opts:["45","48","52","50","55"],ans:3,exp:"(45+50+40+55+60)÷5 = 250÷5 = 50"},
+{q:"Which fruit had the most consistent (least variation) sales across the week?",opts:["Bananas","Apples","Oranges","All the same","Cannot tell"],ans:0,exp:"Bananas range: 20-35 (range 15). Apples: 40-60 (range 20). Oranges: 25-45 (range 20). Bananas are most consistent."}
+]},
+{id:"pct",title:"💯 Percentages",questions:[
+{q:"A student scores 40 out of 50. What percentage is this?",opts:["70%","75%","80%","85%","90%"],ans:2,exp:"40/50 = 0.8 = 80%"},
+{q:"What is 10% of 250?",opts:["10","25","50","2.5","250"],ans:1,exp:"250 × 0.1 = 25"},
+{q:"A shirt costs $80. It is 25% off. What is the sale price?",opts:["$60","$65","$70","$55","$75"],ans:0,exp:"25% of 80 = $20. Sale = $80 - $20 = $60"},
+{q:"A swimmer's time is 12.4 seconds. They improve by 10%. What is the new time?",opts:["11.0s","11.4s","11.16s","12.0s","10.4s"],ans:2,exp:"10% of 12.4 = 1.24. New = 12.4 - 1.24 = 11.16s"},
+{q:"A class has 30 students. 60% are girls. How many boys?",opts:["18","12","15","10","20"],ans:1,exp:"Girls: 60% × 30 = 18. Boys: 30 - 18 = 12"},
+{q:"A student scored 35/50. They need 80% to pass. How many more marks are needed?",opts:["5","10","15","3","8"],ans:0,exp:"80% of 50 = 40. Need 40 - 35 = 5 more marks."},
+{q:"A shirt costs $45. First 20% off, then another 10% off the reduced price. Final price?",opts:["$31.50","$36.00","$32.40","$30.00","$33.75"],ans:2,exp:"After 20%: $45×0.8=$36. After 10%: $36×0.9=$32.40"},
+{q:"Two test scores: 43/50 and 24/50. What is the percentage difference?",opts:["19%","30%","38%","40%","42%"],ans:2,exp:"43-24=19 marks difference. 19/50 = 38%"},
+{q:"A town has population 2000. It grows by 5%. New population?",opts:["2050","2100","2500","2005","2010"],ans:1,exp:"5% of 2000 = 100. New = 2100"},
+{q:"A student scored 24/50. What is the minimum extra marks needed to get over 65%?",opts:["5","6","7","9","10"],ans:3,exp:"65% of 50 = 32.5, so need 33. Extra = 33-24 = 9"}
+]},
+{id:"pattern",title:"🔢 Number Patterns",questions:[
+{q:"What comes next? 2, 4, 8, 16, __",opts:["20","24","32","64","28"],ans:2,exp:"Each number doubles: ×2. 16×2 = 32"},
+{q:"What comes next? 1, 3, 2, 5, 5, 11, 9, 19, 12, __",opts:["20","25","24","30","22"],ans:1,exp:"Two interleaved sequences. Odd positions: 1,2,5,9,12. Even positions: 3,5,11,19,? — each ×2+1 pattern. 12×2+1=25"},
+{q:"What comes next? 3, 5, 9, 15, 23, __",opts:["33","30","35","28","31"],ans:0,exp:"Differences: +2, +4, +6, +8, +10. Next = 23+10 = 33"},
+{q:"What comes next? 1, 1, 2, 3, 5, 8, __",opts:["10","13","11","12","15"],ans:1,exp:"Fibonacci: each number = sum of previous two. 5+8 = 13"},
+{q:"What comes next? 100, 95, 85, 70, 50, __",opts:["30","20","25","35","40"],ans:2,exp:"Differences: -5, -10, -15, -20, -25. 50-25 = 25"},
+{q:"What comes next? 2, 6, 18, 54, __",opts:["162","108","72","216","81"],ans:0,exp:"Each ×3. 54×3 = 162"},
+{q:"What comes next? 1, 4, 9, 16, 25, __",opts:["30","36","49","35","32"],ans:1,exp:"Perfect squares: 1², 2², 3², 4², 5², 6² = 36"},
+{q:"What comes next? 3, 4, 6, 9, 13, __",opts:["16","17","18","19","20"],ans:2,exp:"Differences: +1, +2, +3, +4, +5. 13+5 = 18"},
+{q:"What comes next? 5, 10, 8, 16, 14, 28, __",opts:["26","24","30","56","20"],ans:0,exp:"Pattern: ×2, -2, ×2, -2... 28-2 = 26"},
+{q:"What comes next? 1000, 500, 250, 125, __",opts:["100","75","50","62.5","60"],ans:3,exp:"Each ÷2. 125÷2 = 62.5"}
+]},
+{id:"grid",title:"🔲 Number Grids",questions:[
+{q:'Find the missing number (?) so every row, column, and diagonal sums to <b>15</b>:',grid:[[8,1,6],[3,5,7],[4,9,"?"]],opts:["1","2","3","4","5"],ans:1,exp:"Row 3: 4+9+? = 15, so ? = 2"},
+{q:'Find ? (magic square, sum = <b>15</b>):',grid:[[2,7,6],[9,5,1],[4,"?",8]],opts:["2","3","4","5","6"],ans:1,exp:"Row 3: 4+?+8 = 15, so ? = 3"},
+{q:'Find ? (sum = <b>15</b>):',grid:[[6,1,8],[7,5,"?"],[2,9,4]],opts:["1","2","3","4","5"],ans:2,exp:"Row 2: 7+5+? = 15, so ? = 3"},
+{q:'Find ? (sum = <b>15</b>):',grid:[[4,3,8],["?",5,1],[6,7,2]],opts:["6","7","8","9","10"],ans:3,exp:"Row 2: ?+5+1 = 15, so ? = 9"},
+{q:'Find ? (sum = <b>15</b>):',grid:[[2,9,4],[7,"?",3],[6,1,8]],opts:["5","4","6","3","7"],ans:0,exp:"Row 2: 7+?+3 = 15, so ? = 5"},
+{q:'Find ? (sum = <b>21</b>):',grid:[[10,3,8],[5,7,9],[6,11,"?"]],opts:["3","4","5","6","7"],ans:1,exp:"Row 3: 6+11+? = 21, so ? = 4"},
+{q:'Find ? (sum = <b>12</b>):',grid:[[1,8,3],[6,4,"?"],[5,0,7]],opts:["1","3","2","4","5"],ans:2,exp:"Row 2: 6+4+? = 12, so ? = 2"},
+{q:'Find ? (sum = <b>12</b>):',grid:[[7,2,3],[0,4,"?"],[5,6,1]],opts:["8","6","7","5","9"],ans:0,exp:"Row 2: 0+4+? = 12, so ? = 8"},
+{q:'Find ? (sum = <b>18</b>):',grid:[[11,4,3],[2,6,"?"],[5,8,5]],opts:["8","10","9","12","7"],ans:1,exp:"Row 2: 2+6+? = 18, so ? = 10"},
+{q:'Find ? (sum = <b>12</b>):',grid:[[3,8,1],["?",2,7],[5,6,1]],opts:["2","4","3","5","1"],ans:2,exp:"Row 2: ?+2+7 = 12, so ? = 3"}
+]},
+{id:"comp",title:"🏗️ Composite Shapes",questions:[
+{q:"L-shape: A big rectangle 9×8 with a 4×6 rectangle cut from one corner. Area?",svg:`<svg viewBox="0 0 200 180" width="220"><path d="M10,10 L170,10 L170,90 L90,90 L90,170 L10,170Z" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="80" y="50" text-anchor="middle" font-size="11">9×8</text><rect x="90" y="90" width="80" height="80" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4"/><text x="130" y="135" text-anchor="middle" font-size="10" fill="#dc2626">4×6 cut</text></svg>`,opts:["72 cm²","48 cm²","54 cm²","36 cm²","60 cm²"],ans:1,exp:"9×8 - 4×6 = 72 - 24 = 48 cm²"},
+{q:"T-shape: horizontal 10×3 on top, vertical 4×5 below center. Area?",svg:`<svg viewBox="0 0 220 180" width="220"><rect x="10" y="10" width="200" height="50" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="70" y="60" width="80" height="100" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><text x="110" y="40" text-anchor="middle" font-size="11">10×3</text><text x="110" y="120" text-anchor="middle" font-size="11">4×5</text></svg>`,opts:["50 cm²","45 cm²","55 cm²","40 cm²","60 cm²"],ans:0,exp:"10×3 + 4×5 = 30 + 20 = 50 cm²"},
+{q:"Two rectangles joined: 8×4 and 6×3. Total area?",svg:`<svg viewBox="0 0 240 120" width="240"><rect x="10" y="10" width="120" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="130" y="25" width="90" height="60" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><text x="70" y="55" text-anchor="middle" font-size="11">8×4</text><text x="175" y="60" text-anchor="middle" font-size="11">6×3</text></svg>`,opts:["32 cm²","46 cm²","50 cm²","56 cm²","42 cm²"],ans:2,exp:"8×4 + 6×3 = 32 + 18 = 50 cm²"},
+{q:"Big triangle (base 12, height 8) minus small triangle (base 6, height 4). Shaded area?",svg:`<svg viewBox="0 0 220 160" width="220"><polygon points="10,150 210,150 110,10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="60,150 160,150 110,80" fill="#fff" stroke="#dc2626" stroke-width="2"/></svg>`,opts:["24 cm²","36 cm²","48 cm²","42 cm²","30 cm²"],ans:1,exp:"½×12×8 - ½×6×4 = 48 - 12 = 36 cm²"},
+{q:"Rectangle 10×8, triangle (base 10, height 4) cut from top. Remaining area?",svg:`<svg viewBox="0 0 200 160" width="200"><rect x="10" y="10" width="180" height="140" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="10,10 190,10 100,70" fill="#fff" stroke="#dc2626" stroke-width="2"/></svg>`,opts:["60 cm²","70 cm²","80 cm²","50 cm²","40 cm²"],ans:0,exp:"80 - ½×10×4 = 80 - 20 = 60 cm²"},
+{q:"Cross shape: center 4×4 square with four 2×4 arms. Total area?",svg:`<svg viewBox="0 0 200 200" width="180"><rect x="60" y="10" width="80" height="40" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><rect x="60" y="150" width="80" height="40" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><rect x="10" y="60" width="40" height="80" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><rect x="150" y="60" width="40" height="80" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><rect x="60" y="60" width="80" height="80" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/></svg>`,opts:["32 cm²","40 cm²","48 cm²","64 cm²","56 cm²"],ans:2,exp:"Center 4×4=16. Four arms: 4×(2×4)=32. Total=48 cm²"},
+{q:"House shape: square 6×6 with a triangle (height 4) on top. Total area?",svg:`<svg viewBox="0 0 180 200" width="180"><rect x="10" y="80" width="160" height="110" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><polygon points="10,80 170,80 90,10" fill="#fbbf24" stroke="#d97706" stroke-width="2"/><text x="90" y="150" text-anchor="middle" font-size="11">6×6</text></svg>`,opts:["36 cm²","48 cm²","52 cm²","42 cm²","60 cm²"],ans:1,exp:"6×6 + ½×6×4 = 36 + 12 = 48 cm²"},
+{q:"Rectangle 12×5 with two 2×2 squares cut from corners. Remaining area?",svg:`<svg viewBox="0 0 240 100" width="240"><path d="M10,10 L230,10 L230,90 L200,90 L200,60 L230,60 L230,10 L10,10 L10,90 L40,90 L40,60 L10,60Z" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><rect x="10" y="60" width="30" height="30" fill="#fff" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4"/><rect x="200" y="60" width="30" height="30" fill="#fff" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4"/></svg>`,opts:["52 cm²","56 cm²","60 cm²","48 cm²","54 cm²"],ans:0,exp:"12×5 - 2×(2×2) = 60 - 8 = 52 cm²"},
+{q:"A regular hexagon is made of 6 equilateral triangles, each with area 3 cm². Total area?",svg:`<svg viewBox="0 0 180 160" width="160"><polygon points="90,10 160,45 160,115 90,150 20,115 20,45" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><line x1="90" y1="10" x2="90" y2="150" stroke="#2563eb" stroke-width="1" opacity="0.4"/><line x1="20" y1="45" x2="160" y2="115" stroke="#2563eb" stroke-width="1" opacity="0.4"/><line x1="20" y1="115" x2="160" y2="45" stroke="#2563eb" stroke-width="1" opacity="0.4"/></svg>`,opts:["12 cm²","15 cm²","18 cm²","21 cm²","24 cm²"],ans:2,exp:"6 × 3 = 18 cm²"},
+{q:"Rectangle 8×6 with a circle (diameter 4) cut out. Remaining area ≈ ?",svg:`<svg viewBox="0 0 200 140" width="220"><rect x="10" y="10" width="180" height="120" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><circle cx="100" cy="70" r="35" fill="#fff" stroke="#dc2626" stroke-width="2"/><text x="100" y="75" text-anchor="middle" font-size="10" fill="#dc2626">d=4</text></svg>`,opts:["40.0 cm²","38.0 cm²","36.0 cm²","≈35.4 cm²","32.0 cm²"],ans:3,exp:"48 - π×2² = 48 - 4π ≈ 48 - 12.57 ≈ 35.4 cm²"}
+]}
+];
+
+let answers={},submitted=false;
+const $=s=>document.querySelector(s);
+
+function init(){
+const nav=$("#nav"),content=$("#content");
+sections.forEach((sec,si)=>{
+const btn=document.createElement("button");
+btn.id="tab-"+sec.id;
+btn.innerHTML=sec.title+`<span class="badge" id="badge-${sec.id}">0/10</span>`;
+btn.onclick=()=>showSection(si);
+nav.appendChild(btn);
+
+const div=document.createElement("div");
+div.className="section";div.id="sec-"+sec.id;
+let html=`<h2>${sec.title}</h2>`;
+sec.questions.forEach((q,qi)=>{
+const key=si+"-"+qi;
+html+=`<div class="question" id="q-${key}"><div class="q-header"><span class="q-num">Q${qi+1}.</span> ${q.q}</div>`;
+if(q.svg)html+=q.svg;
+if(q.grid){
+html+='<div class="grid-3x3">';
+q.grid.flat().forEach(c=>html+=`<span${c==="?"?' class="unknown"':''}>${c}</span>`);
+html+='</div>';
+}
+html+='<div class="options">';
+"ABCDE".split("").forEach((L,oi)=>{
+if(q.opts[oi]!==undefined)
+html+=`<div class="opt" data-key="${key}" data-oi="${oi}" onclick="pick('${key}',${oi},this)"><span class="letter">${L}</span>${q.opts[oi]}</div>`;
+});
+html+=`</div><button class="explain-btn" onclick="toggleExp('exp-${key}')">💡 Show Explanation</button><div class="explanation" id="exp-${key}">${q.exp}</div></div>`;
+});
+div.innerHTML=html;
+content.appendChild(div);
+});
+showSection(0);
+updateProgress();
+}
+
+function showSection(i){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.querySelectorAll("#nav button").forEach(b=>b.classList.remove("active"));
+document.getElementById("sec-"+sections[i].id).classList.add("active");
+document.getElementById("tab-"+sections[i].id).classList.add("active");
+}
+
+function pick(key,oi,el){
+if(submitted)return;
+document.querySelectorAll(`[data-key="${key}"]`).forEach(e=>e.classList.remove("selected"));
+el.classList.add("selected");
+answers[key]=oi;
+updateProgress();
+}
+
+function updateProgress(){
+const total=Object.keys(answers).length;
+$("#progressFill").style.width=(total/80*100)+"%";
+$("#progressText").textContent=total+" / 80 answered";
+sections.forEach((sec,si)=>{
+let count=0;
+for(let qi=0;qi<10;qi++)if(answers[si+"-"+qi]!==undefined)count++;
+const badge=document.getElementById("badge-"+sec.id);
+badge.textContent=count+"/10";
+const tab=document.getElementById("tab-"+sec.id);
+tab.classList.toggle("complete",count===10);
+});
+}
+
+function submitQuiz(){
+if(submitted)return;
+if(!confirm("Submit your quiz? You won't be able to change answers."))return;
+submitted=true;
+let totalScore=0;
+const sectionScores=[];
+sections.forEach((sec,si)=>{
+let score=0;
+sec.questions.forEach((q,qi)=>{
+const key=si+"-"+qi;
+const qEl=document.getElementById("q-"+key);
+const opts=qEl.querySelectorAll(".opt");
+const userAns=answers[key];
+if(userAns===q.ans){score++;qEl.classList.add("correct")}
+else{qEl.classList.add("incorrect")}
+opts.forEach((o,oi)=>{
+o.style.cursor="default";
+if(oi===q.ans)o.classList.add("correct-answer");
+else if(oi===userAns&&userAns!==q.ans)o.classList.add("wrong-answer");
+});
+});
+sectionScores.push(score);
+totalScore+=score;
+document.getElementById("badge-"+sec.id).textContent=score+"/10";
+});
+const scoreHTML=`<div class="score-box"><div>🎉 Quiz Complete!</div><div class="big">${totalScore} / 80</div><div>${sectionScores.map((s,i)=>sections[i].title.split(" ").slice(1).join(" ")+": "+s+"/10").join(" | ")}</div><div style="margin-top:8px">${totalScore>=64?"⭐ Excellent!":totalScore>=48?"👏 Great job!":totalScore>=32?"👍 Good effort!":"💪 Keep practising!"}</div></div>`;
+const content=$("#content");
+content.insertAdjacentHTML("afterbegin",scoreHTML);
+$("#submitBtn").disabled=true;
+$("#submitBtn").style.opacity=".5";
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function resetQuiz(){
+if(submitted&&!confirm("Reset the entire quiz?"))return;
+answers={};submitted=false;
+document.querySelectorAll(".question").forEach(q=>{q.classList.remove("correct","incorrect")});
+document.querySelectorAll(".opt").forEach(o=>{o.classList.remove("selected","correct-answer","wrong-answer");o.style.cursor="pointer"});
+document.querySelectorAll(".explanation").forEach(e=>e.classList.remove("show"));
+document.querySelectorAll(".score-box").forEach(e=>e.remove());
+$("#submitBtn").disabled=false;$("#submitBtn").style.opacity="1";
+updateProgress();
+}
+
+function toggleExp(id){
+document.getElementById(id).classList.toggle("show");
+}
+
+init();
+</script>
+</body>
+</html>
